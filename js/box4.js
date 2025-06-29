@@ -32,8 +32,10 @@ const margin4 = { top: 80, right: 30, bottom: 20, left: 130 },
 
 const svg4 = d3.select("#box4")
   .append("svg")
-  .attr("width", width4 + margin4.left + margin4.right)
-  .attr("height", height4 + margin4.top + margin4.bottom)
+  .attr("width", "100%")
+  .attr("height", "auto")
+  .attr("viewBox", `0 0 ${width4 + margin4.left + margin4.right} ${height4 + margin4.top + margin4.bottom}`)
+  .attr("preserveAspectRatio", "xMidYMid meet")
   .append("g")
   .attr("transform", `translate(${margin4.left},${margin4.top})`);
 

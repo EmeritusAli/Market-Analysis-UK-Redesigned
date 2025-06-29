@@ -12,8 +12,10 @@ const margin2 = { top: 50, right: 10, bottom: 50, left: 50 },
 // Create SVG
 const svg2 = d3.select("#box2")
   .append("svg")
-    .attr("width", width2 + margin2.left + margin2.right)
-    .attr("height", height2 + margin2.top + margin2.bottom)
+    .attr("width", "100%")
+    .attr("height", "auto")
+    .attr("viewBox", `0 0 ${width2 + margin2.left + margin2.right} ${height2 + margin2.top + margin2.bottom}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
   .append("g")
     .attr("transform", `translate(${margin2.left},${margin2.top})`);
 

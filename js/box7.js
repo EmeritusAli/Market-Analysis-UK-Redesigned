@@ -72,8 +72,9 @@ const color7 = d3.scaleSequential()
 
 const svg7 = d3.select("#box7")
             .append("svg")
-                .attr("width", width7)
-                .attr("height",height7)
+                .attr("width", "100%")
+                .attr("height","auto")
+                .attr("preserveAspectRatio", "xMidYMid meet")
                 .attr("viewBox", [0,0,width7,height7]);
 
  // Add the x-axis and label.

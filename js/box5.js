@@ -18,8 +18,10 @@ const innerHeight = svgHeight - margin.top - margin.bottom;
 
 const svg = d3.select("#box5")
   .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight)
+  .attr("width", "100%")
+  .attr("height", "auto")
+  .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+  .attr("preserveAspectRatio", "xMidYMid meet")
   .style("font-family", "Roboto, sans-serif");
   
 // title

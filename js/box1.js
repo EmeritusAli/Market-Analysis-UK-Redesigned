@@ -111,8 +111,9 @@ years1.forEach(year => {
   const svg = chartRow
     .append("svg")
     .attr("viewBox", `0 0 ${width1} ${height1}`)
-    .attr("width", width1)
-    .attr("height", height1)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .attr("width", "100%")
+    .attr("height", "auto")
     .append("g")
     .attr("transform", `translate(${(width1 / 2) - 5}, ${height1 / 2})`);
 

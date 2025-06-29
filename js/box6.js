@@ -78,8 +78,8 @@ const color6 = d3.scaleOrdinal()
 // SVG container
 const svg6 = d3.select("#box6")
       .append("svg")
-      .attr("width", width6)
-      .attr("height", height6)
+      .attr("width", "100%")
+      .attr("height", "auto")
       .attr("viewBox", [0, 0, width6, height6])
       .attr("preserveAspectRatio", "xMinYMin meet");
 

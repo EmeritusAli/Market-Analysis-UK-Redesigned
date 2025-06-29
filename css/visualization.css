@@ -7,6 +7,9 @@
   .responsive-svg-container {
     margin-bottom: 20px;
   }
+  .container{
+    padding: 0 10px;
+  }
 }
 
 /* Axis and labels styles */

@@ -50,7 +50,11 @@ const xB = d3.scaleLinear()
 
 const svgB = d3.select("#box4b")
   .append("svg")
-  .attr("viewBox", [0, 0, width, height]);
+  .attr("viewBox", [0, 0, width, height])
+  .attr("width", "100%")
+  .attr("height", "auto")
+  .attr("preserveAspectRatio", "xMidYMid meet")
+  ;
 
 // Title
 svgB.append("text")

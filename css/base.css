@@ -75,11 +75,13 @@ h3 {
   font-size: 2rem;
   line-height: 1.2;
 }
-.em {
-  font-weight: 500;
-}
+
 @media screen and (max-width: 596px) {
   .col-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .col-70, .col-30 {
     flex: 0 0 100%;
     max-width: 100%;
   }
@@ -89,10 +91,14 @@ h3 {
   h2 {
     font-size: 2rem;
   }
-  h2 {
-    font-size: 1.8rem;
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    padding: 0 20px;
   }
 }
+ 
 p {
   margin: 1.2rem 0;
 }
@@ -131,6 +137,7 @@ a:hover, a:focus {
 .text-legend.women {
   background-color: #826C7F;
 }
+
 .text-legend.men {
   background-color: #FA7E61;
 }
