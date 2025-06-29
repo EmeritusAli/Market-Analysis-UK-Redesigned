@@ -37,6 +37,20 @@
 				<div id="box2" class="responsive-svg-container"></div>
 			</div>
 		</div>
+
+        <!-- ads -->
+        <div class="ad-carousel">
+            <div class="ad-slide active">
+                <img src="data/ad2.jpg" alt="Ad 1" />
+            </div>
+            <div class="ad-slide">
+                <img src="data/ad3.jpg" alt="Ad 2" />
+            </div>
+            <div class="ad-slide">
+                <img src="data/ad5.jpeg" alt="Ad 3" />
+            </div>
+        </div>
+
         <!-- 50% - 50% box6 - box4 -->
         <div class="row">
 			<div class="col col-6">
@@ -48,11 +62,44 @@
 		</div>
         		<!-- box 7  -->
         <div id="box7" class="responsive-svg-container"></div>
+
+           <!-- ads -->
+        <div class="ad-carousel">
+            <div class="ad-slide active">
+                <img src="data/ad2.jpg" alt="Ad 1" />
+            </div>
+            <div class="ad-slide">
+                <img src="data/ad3.jpg" alt="Ad 2" />
+            </div>
+            <div class="ad-slide">
+                <img src="data/ad5.jpeg" alt="Ad 3" />
+            </div>
+        </div>
+
+        
                 <!-- box4b -->
         <div id="box4b" class="responsive-svg-container"></div>
 		
 		
 	</div>
+
+    <script>
+        const slides = document.querySelectorAll(".ad-slide");
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+            slide.classList.toggle("active", i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        setInterval(nextSlide, 5000); // change every 5 seconds
+    </script>
 
 	<!-- Load your scripts here -->
 	<script src="https://d3js.org/d3.v7.min.js"></script>

@@ -12,6 +12,29 @@
   }
 }
 
+.ad-carousel {
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.ad-slide {
+  display: none;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.ad-slide.active {
+  display: block;
+}
+
+.ad-slide img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
 /* Axis and labels styles */
 .tick text {
   font-family: 'Roboto', sans-serif;
