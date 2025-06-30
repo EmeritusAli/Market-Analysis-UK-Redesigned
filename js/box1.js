@@ -26,7 +26,7 @@ const color1 = d3.scaleOrdinal()
   .domain(["Agents", "Internet", "Local bookings", "Repeat bookings", "Other"])
   .range(["#4285F4", "#EA4335", "#34A853", "#FBBC04", "#A142F4"]);
 
-// Create container
+// container
 const container = d3.select("#box1")
 container.append("h3")
   .text("Recruitment Method by Year")
@@ -41,7 +41,7 @@ const legend = container.append("div")
   .attr("class", "legend")
   .style("display", "flex")
   .style("justify-content", "center")
-  .style("gap", "20px")
+  .style("gap", "10px")
   .style("margin-bottom", "15px");
 
 legend.selectAll("div")
@@ -52,8 +52,8 @@ legend.selectAll("div")
   .style("align-items", "center")
   .style("gap", "6px")
   .html(d => `
-    <div style="width: 12px; height: 12px; background:${color1(d)}; border-radius: 50%;"></div>
-    <span style="font-family: Roboto, sans-serif; font-size: 12px;">${d}</span>
+    <div style="width: 10px; height: 10px; background:${color1(d)}; border-radius: 50%;"></div>
+    <span style="font-family: Roboto, sans-serif; font-size: 10px;">${d}</span>
   `);
 
 
@@ -113,28 +113,48 @@ years1.forEach(year => {
     .attr("viewBox", `0 0 ${width1} ${height1}`)
     .attr("preserveAspectRatio", "xMidYMid meet")
     .attr("width", "100%")
-    .attr("height", "auto")
     .append("g")
     .attr("transform", `translate(${(width1 / 2) - 5}, ${height1 / 2})`);
 
   const yearData = data1.filter(d => d.year === year);
   const arcs = pie(yearData);
 
-  svg.selectAll("path")
+  // Animate each path
+  const path = svg.selectAll("path")
     .data(arcs)
     .enter()
     .append("path")
     .attr("fill", d => color1(d.data.Recruitment))
+    .transition()
+    .duration(1000)
+    .attrTween("d", function(d) {
+      const i = d3.interpolate(
+        { startAngle: 0, endAngle: 0 },
+        d
+      );
+      return function(t) {
+        return arc(i(t));
+      };
+    });
+
+  // Redraw without transition to capture proper arc geometry for tooltips
+  const staticPaths = svg.selectAll("path.static")
+    .data(arcs)
+    .enter()
+    .append("path")
+    .attr("class", "static")
+    .attr("fill", d => color1(d.data.Recruitment))
     .attr("d", arc)
+    .style("opacity", 0)  // invisible, just for interactivity
     .on("mouseover", function(event, d){
-            tooltip1
+      tooltip1
         .style("display", "block")
         .html(`<strong>${d.data.Recruitment}</strong> (${d.data.year}): ${d.data.percentage}%`)
         .style("left", (event.pageX + 10) + "px")
         .style("top", (event.pageY - 30) + "px");
-})
-      .on("mouseout", function(){
-             tooltip1.style("display", "none");
+    })
+    .on("mouseout", function(){
+      tooltip1.style("display", "none");
     });
 
   // Labels
@@ -146,7 +166,14 @@ years1.forEach(year => {
     .attr("dy", "0.35em")
     .attr("text-anchor", "middle")
     .style("font-size", "10px")
-    .text(d => `${d.data.percentage}%`);
+    .style("opacity", 0)
+    .attr("transform", d => `translate(${outerArc.centroid(d)})`)
+    .text(d => `${d.data.percentage}%`)
+    .transition()
+    .delay(1000)
+    .duration(300)
+    .style("opacity", 1)  // Fade in labels after paths are drawn
+    ;
 
   // Year in center
   svg.append("text")

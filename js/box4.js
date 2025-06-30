@@ -25,7 +25,7 @@ const data4 = [
   { Region: "Australasia", Year: "2014", Value: 1 },
 ];
 
-// Bubble Matrix Chart for this data
+// dimensions and margins
 const margin4 = { top: 80, right: 30, bottom: 20, left: 130 },
       width4 = 500 - margin4.left - margin4.right,
       height4 = 500 - margin4.top - margin4.bottom;
@@ -33,7 +33,6 @@ const margin4 = { top: 80, right: 30, bottom: 20, left: 130 },
 const svg4 = d3.select("#box4")
   .append("svg")
   .attr("width", "100%")
-  .attr("height", "auto")
   .attr("viewBox", `0 0 ${width4 + margin4.left + margin4.right} ${height4 + margin4.top + margin4.bottom}`)
   .attr("preserveAspectRatio", "xMidYMid meet")
   .append("g")
@@ -49,7 +48,7 @@ const color4 = d3.scaleOrdinal()
   .domain(years4)
   .range(["#e15759", "#4e79a7", "#59a14f"]); // based on year
 
-// Background stripes for each row
+// Background stripes 
 y4.domain().forEach((region, i) => {
   svg4.append("rect")
     .attr("x", -70)
@@ -57,7 +56,6 @@ y4.domain().forEach((region, i) => {
     .attr("width", width4 + 30)
     .attr("height", y4.bandwidth() +5)
     .attr("fill", i % 2 === 0 ? "#f7f7f7" : "#f7f7f7");
-    // .attr("stroke", "#e0e0e0");
 });
 
 // Vertical dotted lines
@@ -127,12 +125,18 @@ const circle4 = svg4.selectAll("circle")
   .enter()
   .append("circle")
   .attr("cx", d => x4(d.Year) + x4.bandwidth()/2)
-  .attr("cy", d => y4(d.Region) + y4.bandwidth()/2)
-  .attr("r", d => r4(d.Value))
+  // .attr("cy", d => y4(d.Region) + y4.bandwidth()/2)
+  .attr("r", 0)
   .attr("fill", d => color4(d.Year))
   .attr("stroke", d => d3.rgb(color4(d.Year)).darker(1))
-  .attr("fill-opacity", 0.8)
-   .on("mouseover", function(event, d) {
+  .attr("fill-opacity", 0.8);
+circle4.transition()
+  .duration(1000)
+  .delay((d, i) => i * 100)
+  .attr("r", d => r4(d.Value))
+  .attr("cy", d => y4(d.Region) + y4.bandwidth()/2);
+
+circle4.on("mouseover", function(event, d) {
     const [xm, ym] = d3.pointer(event, svg4.node())
     d3.select("#box4").selectAll("circle").attr("fill-opacity", 0.3);
     d3.select(this).attr("fill-opacity", 1).attr("r", r4(d.Value) + 5);

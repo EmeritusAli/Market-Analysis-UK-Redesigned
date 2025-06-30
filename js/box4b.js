@@ -52,7 +52,6 @@ const svgB = d3.select("#box4b")
   .append("svg")
   .attr("viewBox", [0, 0, width, height])
   .attr("width", "100%")
-  .attr("height", "auto")
   .attr("preserveAspectRatio", "xMidYMid meet")
   ;
 
@@ -74,15 +73,21 @@ yearsB.forEach((year, i) => {
   yearData.forEach(d => {
     const segmentWidth = xB(d.value) - xB(0);
 
-    svgB.append("rect")
+const rect4 = svgB.append("rect")
       .attr("x", xOffset)
       .attr("y", yB)
-      .attr("width", segmentWidth)
+      .attr("width", 0)
       .attr("height", barHeight)
       .attr("stroke", "gray")
       .attr("stroke-opacity",0.5)
-      .attr("fill", colorB(d.age))
-      .on("mouseover", function (e) {
+      .attr("fill", colorB(d.age));
+
+rect4.transition()
+      .duration(600)
+      .delay(i * 150)
+      .attr("width", segmentWidth);
+
+rect4.on("mouseover", function (e) {
         d3.select(this).attr("stroke", "black");
 
         const [xm, ym] = d3.pointer(e);
@@ -101,14 +106,19 @@ yearsB.forEach((year, i) => {
         tooltipB.style("display", "none");
       });
       
-      // Add labels inside the bars
+      // labels inside the bars
     svgB.append("text")
       .attr("x", xOffset + segmentWidth / 2)
       .attr("y", yB + barHeight / 2 + 4)
       .attr("text-anchor", "middle")
       .attr("fill", "white")
       .attr("font-size", "11px")
-      .text(`${d.value}%`);
+      .attr("opacity", 0)
+      .text(`${d.value}%`)
+      .transition()
+      .duration(600)
+      .delay(i * 150 + 600)
+      .attr("opacity", 1);
 
     xOffset += segmentWidth;
   });

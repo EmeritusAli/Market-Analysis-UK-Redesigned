@@ -19,7 +19,6 @@ const innerHeight = svgHeight - margin.top - margin.bottom;
 const svg = d3.select("#box5")
   .append("svg")
   .attr("width", "100%")
-  .attr("height", "auto")
   .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
   .attr("preserveAspectRatio", "xMidYMid meet")
   .style("font-family", "Roboto, sans-serif");
@@ -91,7 +90,17 @@ lineGroups.append("path")
   .attr("fill", "none")
   .attr("stroke", d => color(d.name))
   .attr("stroke-width", 2.5)
-  .attr("d", d => line(d.values));
+  .attr("d", d => line(d.values))
+  .attr("stroke-dasharray", function(d) {
+    const length = this.getTotalLength();
+    return `${length} ${length}`;
+  })
+  .attr("stroke-dashoffset", function(d) {
+    return this.getTotalLength();
+  })
+  .transition()
+  .duration(1200)
+  .attr("stroke-dashoffset", 0);;
 
 // Outer circles
 lineGroups.each(function (d) {
@@ -103,19 +112,30 @@ lineGroups.each(function (d) {
     .attr("class", "outer")
     .attr("fill", "white")
     .attr("stroke", color(d.name))
-    .attr("r", 6)
+    .attr("r", 0)
     .attr("cx", (v, i) => x(parsedDates[i]))
-    .attr("cy", v => y(v));
+    .attr("cy", v => y(v))
+    .transition()
+       .delay((d, i) => i * 150)
+       .duration(500)
+       .attr("r", 6);
 
-  group.selectAll("circle.inner")
+  const inner = group.selectAll("circle.inner")
     .data(d.values.map((v, i) => ({ value: v, date: parsedDates[i], category: d.name })))
     .join("circle")
     .attr("class", "inner")
     .attr("fill", color(d.name))
-    .attr("r", 3)
+    .attr("r", 0)
     .attr("cx", d => x(d.date))
-    .attr("cy", d => y(d.value))
-    .on("mouseover", function (event, d) {
+    .attr("cy", d => y(d.value));
+
+
+    inner.transition()
+      .delay((d, i) => i * 150)
+      .duration(800)
+      .attr("r", 3);
+
+    inner.on("mouseover", function (event, d) {
       const [xm, ym] = d3.pointer(event, svg.node());
       tooltipGroup.style("display", null).attr("transform", `translate(${xm },${ym})`);
           tooltipText5.text(`${d.category} (${d.date.getFullYear()}): £${d3.format(",")(d.value)}`);
@@ -139,7 +159,12 @@ lineGroups.append("text")
   .attr("text-anchor", "end")
   .attr("dominant-baseline", "end")
   .style("font-size", "12px")
-  .text(d => d.name);
+  .style("opacity", 0)
+  .text(d => d.name)
+  .transition()
+    .delay(1000)
+    .duration(500)
+    .style("opacity", 1);
 
 
 //  SVG-based tooltip

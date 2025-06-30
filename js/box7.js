@@ -73,11 +73,10 @@ const color7 = d3.scaleSequential()
 const svg7 = d3.select("#box7")
             .append("svg")
                 .attr("width", "100%")
-                .attr("height","auto")
                 .attr("preserveAspectRatio", "xMidYMid meet")
                 .attr("viewBox", [0,0,width7,height7]);
 
- // Add the x-axis and label.
+ //  x-axis and label.
   const xaxis = svg7.append("g")
       .attr("transform", `translate(0,${height7 - margins7.bottom})`)
       .call(d3.axisBottom(x7).tickSize(0))
@@ -88,7 +87,7 @@ const svg7 = d3.select("#box7")
           .attr("fill", "currentColor")
           .attr("text-anchor", "end")
           .text("year →"));
-  // Add the y-axis and label, and remove the domain line.
+  //  y-axis and label, and remove the domain line.
   const yaxis = svg7.append("g")
       .attr("transform", `translate(${margins7.left},0)`)
       .call(d3.axisLeft(y7).tickSize(0))
@@ -106,7 +105,12 @@ const squares = svg7.selectAll()
                    .style("fill", d => color7(d.percentage))
                    .style("stroke-width", 4)
                    .style("stroke", "none")
-                   .style("opacity", 0.8);
+                   .style("opacity", 0)
+        squares.transition()
+                   .duration(1000)
+                   .delay((d, i) => i * 10)
+                   .style("opacity", 1);
+                  
         //tooltip
         const tooltip7 = svg7.append("g")
         .style("display", "none")
@@ -128,7 +132,7 @@ const squares = svg7.selectAll()
       
       d3.select(this)
         .style("stroke", "black")
-        .style("opacity", 1)
+        
 
       tooltip7
       .style("display", null)
@@ -145,7 +149,7 @@ const squares = svg7.selectAll()
       d3.select(this)
           .transition()
           .duration(200)
-          .attr("stroke", d => "#00cc99")
+          .attr("stroke", "black")
       
       tooltip7.attr("transform", `translate(${xm - 4},${ym + 3})`);
       tooltipText.text(`${d.category}: ${d.percentage}%`);
@@ -155,9 +159,7 @@ const squares = svg7.selectAll()
       
       d3.select(this)
         .style("stroke", "none")
-        .style("opacity", 0.8)
 
-      // label.attr("display", "none")
       tooltip7
           .style("display", "none")
     });
@@ -190,7 +192,12 @@ svg7.selectAll("text.square-label")
   .attr("font-size", "12px")
   .attr("font-family", "Roboto, sans-serif")
   .attr("fill", "black")
-  .text(d => `${d.percentage}%`);
+  .attr("opacity", 0)
+  .text(d => `${d.percentage}%`)
+  .transition()
+  .duration(1000)
+  .delay((d, i) => i * 300)
+  .attr("opacity", 1);
 
 // Add a title
   const title = svg7.append("g")

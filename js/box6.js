@@ -66,10 +66,7 @@ const y6 = d3.scalePoint()
   .rangeRound([marginTop, height6 - marginBottom])
   .padding(1);
 
-// const color6 = d3.scaleOrdinal()
-//   .domain([...years6])
-//   .range(d3.schemeSet1)
-//   .unknown("#ccc");
+
 
 const color6 = d3.scaleOrdinal()
   .domain([...years6])
@@ -79,7 +76,6 @@ const color6 = d3.scaleOrdinal()
 const svg6 = d3.select("#box6")
       .append("svg")
       .attr("width", "100%")
-      .attr("height", "auto")
       .attr("viewBox", [0, 0, width6, height6])
       .attr("preserveAspectRatio", "xMinYMin meet");
 
@@ -115,6 +111,10 @@ g.append("line")
   .attr("stroke", "#aaa")
   .attr("stroke-opacity", 0.5)
   .attr("stroke-width", 1.5)
+  .attr("x1", x6(0))
+  .attr("x2", x6(0))
+  .transition()
+  .duration(500)
   .attr("x1", ([, values]) => x6(d3.min(values, d => d.percentage)))
   .attr("x2", ([, values]) => x6(d3.max(values, d => d.percentage)));
 
@@ -144,14 +144,21 @@ const allCircles = g.append("g")
             .data(([, values]) => values)
             .join("circle")
             .attr("class", "dot")
-            .attr("cx", d => x6(d.percentage) + yearOffset[d.year])
+            .attr("cx",x6(0))
             .attr("fill", d => color6(d.year))
             .attr("fill-opacity", 0.8)
             .attr("stroke", "white")
             .attr("stroke-width", 1.5)
             // .attr("stroke", d => d3.rgb(color6(d.Year)).darker(1))
-            .attr("r", 10.5)
-            .on("mouseover", function(event, d) {
+            .attr("r", 10.5);
+
+          // Transition 
+allCircles.transition()
+            .duration(1200)
+            .attr("cx", d => x6(d.percentage) + yearOffset[d.year]);
+
+
+allCircles.on("mouseover", function(event, d) {
                 const [xm, ym] = d3.pointer(event, svg6.node());
                 svg6.selectAll(".dot").attr("fill-opacity", 0.2);
                 d3.select(this)
@@ -168,6 +175,7 @@ const allCircles = g.append("g")
                 .attr("r", 10.5);
                 tooltip6.style("display", "none");
             });
+
 // label for highest and lowest dots in the dot
 svg6.append("g")
   .selectAll("text")
@@ -184,8 +192,6 @@ svg6.append("g")
   .attr("fill", "white")
   .attr("text-anchor", "middle")
   .text(d => `${d.percentage}%`);
-
- 
 
 // Add legend for year colors
 const legend6 = svg6.append("g")
@@ -218,7 +224,13 @@ g.append("text")
   .attr("y", -4)
   .attr("text-anchor", "end")
   .attr("font-size", "14px")
-  .text(([nat]) => nat);
+  .attr("opacity", 0)
+  .text(([nat]) => nat)
+  .transition()
+  .ease(d3.easeCubicInOut)
+  .duration(1000)
+  .delay(900)
+  .attr("opacity", 1);
 
   // Add title
 svg6.append("text")
